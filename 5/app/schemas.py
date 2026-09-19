@@ -1,8 +1,9 @@
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 
-# Student Schemas
+# ---------- Student ----------
+
 class StudentBase(BaseModel):
     first_name: str
     last_name: str
@@ -13,14 +14,14 @@ class StudentCreate(StudentBase):
     pass
 
 
-class StudentResponse(StudentBase):
+class StudentOut(StudentBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
-# Course Schemas
+# ---------- Course ----------
+
 class CourseBase(BaseModel):
     title: str
     duration: int
@@ -30,18 +31,17 @@ class CourseCreate(CourseBase):
     pass
 
 
-class CourseResponse(CourseBase):
+class CourseOut(CourseBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
-# StudentCourse Schema
-class StudentCourseResponse(BaseModel):
+# ---------- StudentCourse (Many-to-Many) ----------
+
+class StudentCourseOut(BaseModel):
     student_id: int
     course_id: int
-    created_at: datetime
+    joined_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
